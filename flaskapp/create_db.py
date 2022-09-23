@@ -1,6 +1,6 @@
 
 #Run this to create site.db
-#Install MySQL Workbench to view data in db
+#UseSQLite Studio to view data content in db
 from flaskapp import db
 from run import app
 
