@@ -23,6 +23,17 @@ h1, h2, h3, h4, h5, h6 {
 .site-header .navbar-nav .nav-link.active {
   font-weight: 500;
 }
+/*user defined*/
+.mr-auto, .mx-auto {
+    margin-right: auto!important;
+}
+.form-group {
+    margin-bottom: 1rem;
+}
+label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
 
 .content-section {
   background: #ffffff;
