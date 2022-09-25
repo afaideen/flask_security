@@ -1,10 +1,11 @@
 from flask import render_template, request, Blueprint
 
+from flaskapp import login_manager
 from flaskapp.models import Post
 
 main = Blueprint('main', __name__)
 
-
+@login_manager.user_loader
 @main.route("/")
 @main.route("/home")
 def home():

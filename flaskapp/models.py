@@ -3,7 +3,9 @@ from datetime import datetime
 from flask import current_app
 from flask_login import UserMixin
 
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+# from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from itsdangerous import Serializer
+
 from flaskapp import db
 
 
