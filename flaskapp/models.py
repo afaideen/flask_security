@@ -1,9 +1,8 @@
-# from datetime import datetime
+
 
 from flask import current_app
 from flask_login import UserMixin
 
-# from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, URLSafeTimedSerializer
 from itsdangerous import URLSafeSerializer as Serializer
 
 from flaskapp import db, login_manager
@@ -34,8 +33,6 @@ class User(db.Model, UserMixin):
             algorithm="HS256"
         )
 
-        # s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
-        # v = s.dumps({'user_id': self.id}).decode('utf-8')
         return v
 
     @staticmethod
@@ -48,11 +45,6 @@ class User(db.Model, UserMixin):
         )
         user_id = data.get('confirm')
 
-        # s = Serializer(current_app.config['SECRET_KEY'])
-        # try:
-        #     user_id = s.loads(token)['user_id']
-        # except:
-        #     return None
         return User.query.get(user_id)
 
     def __repr__(self):
