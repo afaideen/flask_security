@@ -3,8 +3,8 @@
 from flask import current_app
 from flask_login import UserMixin
 
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, URLSafeTimedSerializer
-# from itsdangerous import URLSafeSerializer as Serializer
+# from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, URLSafeTimedSerializer
+from itsdangerous import URLSafeSerializer as Serializer
 
 from flaskapp import db, login_manager
 import jwt
@@ -24,27 +24,35 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Post', backref='author', lazy=True)
 
     def get_reset_token(self, expires_sec=1800):
-        # v = jwt.encode(
-        #     {
-        #         "confirm": self.id,
-        #         "exp": datetime.datetime.now(tz=datetime.timezone.utc)
-        #                + datetime.timedelta(seconds=expires_sec)
-        #     },
-        #     current_app.config['SECRET_KEY'],
-        #     algorithm="HS256"
-        # )
+        v = jwt.encode(
+            {
+                "confirm": self.id,
+                "exp": datetime.datetime.now(tz=datetime.timezone.utc)
+                       + datetime.timedelta(seconds=expires_sec)
+            },
+            current_app.config['SECRET_KEY'],
+            algorithm="HS256"
+        )
 
-        s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
-        v = s.dumps({'user_id': self.id}).decode('utf-8')
+        # s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
+        # v = s.dumps({'user_id': self.id}).decode('utf-8')
         return v
 
     @staticmethod
     def verify_reset_token(token):
-        s = Serializer(current_app.config['SECRET_KEY'])
-        try:
-            user_id = s.loads(token)['user_id']
-        except:
-            return None
+        data = jwt.decode(
+            token,
+            current_app.config['SECRET_KEY'],
+            leeway=datetime.timedelta(seconds=300),
+            algorithms=["HS256"]
+        )
+        user_id = data.get('confirm')
+
+        # s = Serializer(current_app.config['SECRET_KEY'])
+        # try:
+        #     user_id = s.loads(token)['user_id']
+        # except:
+        #     return None
         return User.query.get(user_id)
 
     def __repr__(self):
