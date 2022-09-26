@@ -5,7 +5,7 @@ from flaskapp.models import Post
 
 main = Blueprint('main', __name__)
 
-@login_manager.user_loader
+
 @main.route("/")
 @main.route("/home")
 def home():
@@ -15,4 +15,4 @@ def home():
 
 @main.route("/about")
 def about():
-    return "Hi there!"
+    return render_template('about.html', title='About')
