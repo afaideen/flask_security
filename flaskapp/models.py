@@ -3,7 +3,7 @@
 from flask import current_app
 from flask_login import UserMixin
 
-from itsdangerous import URLSafeSerializer as Serializer
+from itsdangerous import URLSafeSerializer
 
 from flaskapp import db, login_manager
 import jwt
