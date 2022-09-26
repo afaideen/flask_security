@@ -22,10 +22,10 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
 
-    def get_reset_token(self, expires_sec=1800):
+    def get_reset_token(self, expires_sec=1800):#will expire in 30minutes
         v = jwt.encode(
             {
-                "confirm": self.id,
+                "user_id": self.id,
                 "exp": datetime.datetime.now(tz=datetime.timezone.utc)
                        + datetime.timedelta(seconds=expires_sec)
             },
@@ -40,10 +40,10 @@ class User(db.Model, UserMixin):
         data = jwt.decode(
             token,
             current_app.config['SECRET_KEY'],
-            leeway=datetime.timedelta(seconds=300),
+            leeway=datetime.timedelta(seconds=10),
             algorithms=["HS256"]
         )
-        user_id = data.get('confirm')
+        user_id = data.get('user_id')
 
         return User.query.get(user_id)
 
