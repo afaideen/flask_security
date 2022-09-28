@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <!-- recommended below bootstrap css file -->
+    <link rel="stylesheet" type="text/css" href="static/main.css">
+
+
+    <title>Flask Blog - My Home Page</title>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+          <div class="container">
+            <a class="navbar-brand mr-4" href="/">Flask Blog</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarToggle">
+                  <div class="navbar-nav mr-auto">
+                    <a class="nav-item nav-link" href="/home">Home</a>
+                    <a class="nav-item nav-link" href="/about">About</a>
+                  </div>
+                  <!-- Navbar Right Side -->
+                  <div class="navbar-nav">
+
+                      <a class="nav-item nav-link" href="/login">Login</a>
+                      <a class="nav-item nav-link" href="/register">Register</a>
+
+                  </div>
+            </div>
+          </div>
+        </nav>
+    </header>
+
+    <main role="main" class="container">
+        <div class="row">
+          <div class="col-md-8">
+
+
+
+
+
+          <article class="media content-section">
+            <img class="rounded-circle article-img" src="static/profile_pics/a6480637cf328a39.jpg">
+            <div class="media-body">
+              <div class="article-metadata">
+                <a class="mr-2" href="/user/afaideen">afaideen</a>
+                <small class="text-muted">2022-09-26</small>
+              </div>
+              <h2><a class="article-title" href="/post/2">Mengasah bakat flask programming</a></h2>
+              <p class="article-content">verifying sending email feature with advanced method</p>
+            </div>
+          </article>
+
+          <article class="media content-section">
+            <img class="rounded-circle article-img" src="static/profile_pics/403857be33e84476.jpg">
+            <div class="media-body">
+              <div class="article-metadata">
+                <a class="mr-2" href="/user/aiskacangsegamat">aiskacangsegamat</a>
+                <small class="text-muted">2022-09-26</small>
+              </div>
+              <h2><a class="article-title" href="/post/1">Hari ini apa nak buat</a></h2>
+              <p class="article-content">Belajar Flask dengan lebih mendalam. Perkemas dan tajamkan ilmu pengetahuan dan kemahiran dalam pembangunan backend.</p>
+            </div>
+          </article>
+
+
+
+
+            <a class="btn btn-info mb-4" href="/home?page=1">1</a>
+
+
+
+
+          </div>
+          <div class="col-md-4">
+            <div class="content-section">
+              <h3>Our Sidebar</h3>
+              <p class="text-muted">You can put any information here you'd like.
+                </p><ul class="list-group">
+                  <li class="list-group-item list-group-item-light">Latest Posts</li>
+                  <li class="list-group-item list-group-item-light">Announcements</li>
+                  <li class="list-group-item list-group-item-light">Calendars</li>
+                  <li class="list-group-item list-group-item-light">etc</li>
+                </ul>
+              <p></p>
+            </div>
+          </div>
+        </div>
+      </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+
+</body>
+</html>

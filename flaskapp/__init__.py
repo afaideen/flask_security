@@ -28,11 +28,13 @@ def create_app(config_class=Config_):
     from flaskapp.main.routes import main
     from flaskapp.users.routes import users
     from flaskapp.posts.routes import posts
+    from flaskapp.example1.routes import example1
     from flaskapp.errors.handlers import errors
 
     app.register_blueprint(main)
     app.register_blueprint(users)
     app.register_blueprint(posts)
+    app.register_blueprint(example1)
     app.register_blueprint(errors)
 
 

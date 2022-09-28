@@ -1,6 +1,5 @@
 from flask import render_template, request, Blueprint
 
-from flaskapp import login_manager
 from flaskapp.models import Post
 
 main = Blueprint('main', __name__)
@@ -16,3 +15,5 @@ def home():
 @main.route("/about")
 def about():
     return render_template('about.html', title='About')
+
+
