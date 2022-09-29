@@ -1,20 +1,56 @@
+import secrets
+import time
 
-from flask import render_template, Blueprint, redirect, url_for
+from flask import render_template, Blueprint, redirect, url_for, session, jsonify, request
 from flaskapp.example1.form import UpdateFileForm
+from flaskapp import cache
+
 
 example1 = Blueprint('example1', __name__)
 
+@example1.route("/read_progress_value/<string:ip_address>", methods=['GET'])
+def read_progress_value(ip_address):
+    # progress_bar_value = session.get('progress_bar_value')
+    progress_bar_value = cache.get('progress_bar_value_' + ip_address)
+    progress_value = progress_bar_value
+    time.sleep(1.0)
+    out = {
+        'progress_value':progress_value
+    }
+    return jsonify(out)
+#   return "Progress value: " + str(progress_value)
+
 @example1.route("/example1_home", methods=['GET', 'POST'])
 def example1_home():
+    ip_address = request.remote_addr
+    if len(ip_address) == 0:
+        ip_address = request.environ['HTTP_X_FORWARDED_FOR']
+    remote_port = request.environ.get('REMOTE_PORT')
     form = UpdateFileForm()
     if form.validate_on_submit():
-        progress_bar_value = '75%'
-
+        v = 0
+        while v < 100:
+            v = v + 5
+            progress_bar_value = str(v) + '%'
+            cache.set('progress_bar_value_' + ip_address,progress_bar_value)
+            print("Progress value: %s" %(progress_bar_value))
+            time.sleep(1.0)
+        E = 1
+        cache.delete('progress_bar_value_' + ip_address)
         # return redirect(url_for('example1.example1_home'))
     else:
-        progress_bar_value = '5%'
+        # random_hex = secrets.token_hex(8)
+        v = 0
+        progress_bar_value = str(v) + '%'
+        cache.set('progress_bar_value_%s:%d' %(ip_address,remote_port),progress_bar_value)
+
         # form.program.render_kw['disabled'] = False
-    return render_template('example1.html', title='Example1', form=form, progress_bar_value=progress_bar_value)
+    return render_template('example1.html',
+                           title='Example1',
+                           form=form,
+                           progress_bar_value=progress_bar_value,
+                           ip_address=ip_address,
+                           )
 
 @example1.route("/check_version", methods=['GET'])
 def check_version():

@@ -1,5 +1,8 @@
 
+import sys, os
 from flask import Flask
+from flask_cors import CORS
+from flask_caching import Cache
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
@@ -7,6 +10,23 @@ from flask_sqlalchemy import SQLAlchemy
 
 from flaskapp.config_ import Config_
 
+app = Flask(__name__)
+
+if sys.platform == 'win32':
+    config_redis = {
+        'CACHE_TYPE': 'simple',
+    }
+else:
+    print("Configuring redis...")
+    config_redis = {
+        'CACHE_TYPE': 'redis',
+        'CACHE_KEY_PREFIX': 'server1',
+        'CACHE_REDIS_HOST': 'localhost',
+        'CACHE_REDIS_PORT': '6379',
+        'CACHE_REDIS_URL': 'redis://localhost:6379',
+    }
+cache = Cache(app, config=config_redis)
+cache.clear()
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -17,13 +37,15 @@ mail = Mail()
 
 
 def create_app(config_class=Config_):
-    app = Flask(__name__)
+
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config.from_object(Config_)
     db.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
+
+
 
     from flaskapp.main.routes import main
     from flaskapp.users.routes import users
