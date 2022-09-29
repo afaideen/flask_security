@@ -7,6 +7,7 @@ from flaskapp import cache
 
 
 example1 = Blueprint('example1', __name__)
+CONFIG_TIME_SIM_SPEED = 0.5
 
 @example1.route("/read_progress_value/<string:ip_address>", methods=['GET'])
 @login_required
@@ -14,7 +15,7 @@ def read_progress_value(ip_address):
     # progress_bar_value = session.get('progress_bar_value')
     progress_bar_value = cache.get('progress_bar_value_' + ip_address)
     progress_value = progress_bar_value
-    time.sleep(0.5)
+    time.sleep(CONFIG_TIME_SIM_SPEED)
     out = {
         'progress_value':progress_value
     }
@@ -36,7 +37,7 @@ def example1_home():
             progress_bar_value = str(v) + '%'
             cache.set('progress_bar_value_' + ip_address,progress_bar_value)
             print("Progress value: %s" %(progress_bar_value))
-            time.sleep(0.5)
+            time.sleep(CONFIG_TIME_SIM_SPEED)
         E = 1
         status_fw = "Firmware programmed successfully"
         cache.delete('progress_bar_value_' + ip_address)
