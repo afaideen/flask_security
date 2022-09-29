@@ -1,6 +1,6 @@
 import secrets
 import time
-
+from flask_login import current_user, login_required
 from flask import render_template, Blueprint, redirect, url_for, session, jsonify, request
 from flaskapp.example1.form import UpdateFileForm
 from flaskapp import cache
@@ -9,11 +9,12 @@ from flaskapp import cache
 example1 = Blueprint('example1', __name__)
 
 @example1.route("/read_progress_value/<string:ip_address>", methods=['GET'])
+@login_required
 def read_progress_value(ip_address):
     # progress_bar_value = session.get('progress_bar_value')
     progress_bar_value = cache.get('progress_bar_value_' + ip_address)
     progress_value = progress_bar_value
-    time.sleep(1.0)
+    time.sleep(0.5)
     out = {
         'progress_value':progress_value
     }
@@ -21,6 +22,7 @@ def read_progress_value(ip_address):
 #   return "Progress value: " + str(progress_value)
 
 @example1.route("/example1_home", methods=['GET', 'POST'])
+@login_required
 def example1_home():
     ip_address = request.remote_addr
     if len(ip_address) == 0:
@@ -34,8 +36,9 @@ def example1_home():
             progress_bar_value = str(v) + '%'
             cache.set('progress_bar_value_' + ip_address,progress_bar_value)
             print("Progress value: %s" %(progress_bar_value))
-            time.sleep(1.0)
+            time.sleep(0.5)
         E = 1
+        status_fw = "Firmware programmed successfully"
         cache.delete('progress_bar_value_' + ip_address)
         # return redirect(url_for('example1.example1_home'))
     else:
@@ -43,6 +46,7 @@ def example1_home():
         v = 0
         progress_bar_value = str(v) + '%'
         cache.set('progress_bar_value_%s:%d' %(ip_address,remote_port),progress_bar_value)
+        status_fw = 'Ready'
 
         # form.program.render_kw['disabled'] = False
     return render_template('example1.html',
@@ -50,6 +54,7 @@ def example1_home():
                            form=form,
                            progress_bar_value=progress_bar_value,
                            ip_address=ip_address,
+                           status_fw=status_fw,
                            )
 
 @example1.route("/check_version", methods=['GET'])

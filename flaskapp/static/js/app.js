@@ -16,6 +16,7 @@ function enableProgramButton()
 function updateProgressBar(ip_address)
 {
     idProgressBar = document.getElementById('progress_bar');
+    idStatusBar = document.getElementById('status');
     console.log('fetching api...read_progress_value/' + ip_address)
 //    fetch('verify/'+ p + '/' + v).then(function(response)
     fetch('read_progress_value/' + ip_address).then(function(response)
@@ -25,13 +26,12 @@ function updateProgressBar(ip_address)
             console.log(data);
             idProgressBar.style.width = data.progress_value;
             idProgressBar.innerHTML= data.progress_value;
-//            if(data.progress_value != '100%')
-//            {
             updateProgressBar(ip_address);
-//               setTimeout(updateProgressBar(), 1000);
+//            if(data.progress_value == '100%')
+//            {
+//               idStatusBar.innerHTML = "Firmware programmed...successful"
 //            }
-//            else
-//               console.log('100% stop!...');
+
         });
 
     });
