@@ -49,19 +49,25 @@ def example1_home():
                 time.sleep(CONFIG_TIME_SIM_SPEED)
             E = 1
             status_fw = "Firmware programmed successfully"
+            disabled = ""
             cache.delete('progress_bar_value_' + ip_address)
+
             # return redirect(url_for('example1.example1_home'))
             # return redirect(request.url)
+
         else:
             v = 0
             progress_bar_value = str(v) + '%'
             status_fw = 'Please upload valid hex file'
+            disabled = "disabled=disabled"
     else:
         # random_hex = secrets.token_hex(8)
         v = 0
         progress_bar_value = str(v) + '%'
+        status_fw = 'Please enter valid board ip address'
+        disabled = "disabled=disabled"
         cache.set('progress_bar_value_%s:%d' %(ip_address,remote_port),progress_bar_value)
-        status_fw = 'Ready'
+
 
         # form.program.render_kw['disabled'] = False
     return render_template('example1.html',
@@ -70,6 +76,7 @@ def example1_home():
                            progress_bar_value=progress_bar_value,
                            ip_address=ip_address,
                            status_fw=status_fw,
+                           disabled_=disabled,
                            )
 
 @example1.route("/check_version/<string:ip_addr>", methods=['GET'])

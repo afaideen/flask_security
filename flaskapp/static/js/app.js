@@ -2,6 +2,7 @@
 
 
 //use DOM method
+idInputHexFile = document.getElementById('hexfile');
 idConnect = document.getElementById('connect');
 idErase = document.getElementById('erase');
 idVerify = document.getElementById('verify');
@@ -149,7 +150,8 @@ function connect_brd(ip_val)
 
 function updateProgressBar(ip_address)
 {
-
+    if(idInputHexFile.files.length == 0 )
+        return;
 
     console.log('fetching api...read_progress_value/' + ip_address)
 
@@ -164,6 +166,7 @@ function updateProgressBar(ip_address)
                 idProgressBar.innerHTML = data.progress_value;
 
             }
+
             updateProgressBar(ip_address);
 
         });
