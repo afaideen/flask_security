@@ -1,11 +1,12 @@
 import secrets
 import time
-from binascii import hexlify
+from binascii import hexlify, unhexlify
 
 from flask_login import current_user, login_required
 from flask import render_template, Blueprint, redirect, url_for, session, jsonify, request
 from flaskapp.example1.form import UpdateFileForm
 from flaskapp import cache
+from flaskapp.example1.utils import convertByte2Str, calculate_checksum
 from flaskapp.secret.my_udp_btl_v3 import UDPStream
 
 example1 = Blueprint('example1', __name__)
@@ -39,6 +40,10 @@ def upload_file():
     if len(ip_address) == 0:
         ip_address = request.environ['HTTP_X_FORWARDED_FOR']
     remote_port = request.environ.get('REMOTE_PORT')
+
+    crc, data_len = calculate_checksum(data)
+    crc_in_bytes = unhexlify(crc)
+    crc_in_str = (convertByte2Str(crc_in_bytes))
 
     # upload file to board start here
     #simulating...
