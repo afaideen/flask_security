@@ -1,16 +1,38 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1>Example 1: Uploading firmware</h1>
+
+    <div class="form-group">
+        <label for="ip_address_brd" class="form-label">IP address:</label>
+            <div class="input-group mb-4">
+                  <span class="input-group-text">
+                        <i class="bi bi-exclamation-diamond-fill text-secondary"></i>
+                  </span>
+                  <input type="text" oninput="enableConnectButton()" id="ip_address_brd" class="form-control" placeholder="e.g. 192.168.137.11" minlength="7" maxlength="15" size="15" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$"/>
+
+                  <!-- tooltip -->
+                  <span class="input-group-text">
+                    <span class="tt" data-bs-placement="bottom" title="Enter an ip address of the board">
+                        <i class="bi bi-question-circle text-muted"></i>
+                    </span>
+                  </span>
+            </div>
+    </div>
+    <div class="justify-content-center text-center mb-5">
+        <button id="connect" type="button" class="btn btn-outline-primary mx-2" onclick="connect_brd(ip_address_brd.value)" disabled="disabled">Connect</button>
+    </div>
+
     <div class="progress my-2">
         <div id="progress_bar" class="progress-bar" role="progressbar" style="width: {{progress_bar_value}}" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{progress_bar_value}}</div>
     </div>
     <div class="my-2 text-center">
         <h7 id="status">{{status_fw}}</h7>
     </div>
-    <div class="my-2">
+    <div class="my-5">
         <form method="POST" action="" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
+
                 <div class="form-group">
                     {{ form.hexfile.label() }}
                     {{ form.hexfile(class="form-control-file") }}
@@ -28,15 +50,11 @@
         </form>
     </div>
     <div class="my-2 justify-content-center text-center">
-<!--        <button type="button" class="btn btn-secondary mx-2">Load Hex File</button>-->
-        <button type="button" class="btn btn-danger mx-2">Erase</button>
-<!--        <button id="program" type="submit" class="btn btn-outline-warning mx-2">Program</button>-->
 
-
-<!--        <button type="button" class="btn btn-info mx-2">Verify</button>-->
-        <a class="btn btn-info mx-2" href="{{ url_for('example1.check_version') }}">Version</a>
-        <a class="btn btn-primary mx-2" href="{{ url_for('example1.verify') }}">Verify</a>
-        <button type="button" class="btn btn-success mx-2">Run App</button>
+        <button id="erase" type="button" class="btn btn-outline-danger mx-2" disabled="disabled" onclick="eraseFlash(ip_address_brd.value)">Erase</button>
+        <button id="check_version" type="button" class="btn btn-outline-info mx-2" disabled="disabled" onclick="checkVersion(ip_address_brd.value)">Version</button>
+        <button id="verify" type="button" class="btn btn-outline-primary mx-2" disabled="disabled" onclick="verifyCS16(ip_address_brd.value)">Verify</button>
+        <button id="run_app" type="button" class="btn btn-outline-success mx-2" disabled="disabled" onclick="runApp(ip_address_brd.value)">Run App</button>
     </div>
 
 

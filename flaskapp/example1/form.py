@@ -5,7 +5,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 
 class UpdateFileForm(FlaskForm):
-    hexfile = FileField('Load hex file', validators=[FileAllowed(['hex'])],
+    hexfile = FileField('Load hex file', validators=[DataRequired(), FileAllowed(['hex'])],
                         render_kw={
                             'oninput':'enableProgramButton()',
                             'accept':'.hex'
