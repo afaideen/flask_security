@@ -18,29 +18,28 @@ idStatus = document.getElementById('status');
 idStatus.innerHTML = 'Please enter valid board ip address';
 
 var a = null;
+var count_null = null;
 
 function enableConnectButton()
 {
     if( a != null )
         clearTimeout(a);
      a = setTimeout(function(){
-            if(ValidateIPaddress(idIpAddrBrd))
-            {
-                idConnect.disabled = false;
-                clearTimeout(a);
-                idStatus.innerHTML = 'Ip address format is valid. Press button to connect with the board.';
+        if(ValidateIPaddress(idIpAddrBrd))
+        {
+            idConnect.disabled = false;
+            clearTimeout(a);
+            idStatus.innerHTML = 'Ip address format is valid. Press button to connect with the board.';
 
 //                idIpAddrBrd.addEventListener("keyup", checkInputIpAddr);
-            }
-            else
-            {
-                idConnect.disabled = true;
-                idStatus.innerHTML = 'Please enter valid board ip address';
-            }
+        }
+        else
+        {
+            idConnect.disabled = true;
+            idStatus.innerHTML = 'Please enter valid board ip address';
+        }
 
      }, 5000);
-
-
 
 }
 
@@ -54,16 +53,6 @@ function checkInputIpAddr()
     }
 
 }
-
-//var hasFocus = $('#idIpAddrBrd').is(':focus');
-//if(!hasFocus){
-//    if(ValidateIPaddress(idIpAddrBrd))
-//    {
-//        idConnect.disabled = false;
-//        clearTimeout(a);
-//        idStatus.innerHTML = 'Ip address format is valid. Press button to connect with the board.';
-//    }
-//}
 
 function ValidateIPaddress(inputText)
  {
@@ -81,13 +70,74 @@ function ValidateIPaddress(inputText)
 
 function enableProgramButton()
 {
-//    classProgressBar= document.getElementsByClassName('progress-bar');
     idProgram.disabled = false;
-
     //use jquery method
 //    $('#program').prop('disabled', false);
     console.log("Enabling 'Program' button...")
 
+}
+
+function uploadFile(ip_address) {
+        count_null = 0
+      idProgressBar.style.width = '0%';
+      idProgressBar.innerHTML = '0%';
+      if(idInputHexFile.files.length == 0 )
+      {
+        idStatus.innerHTML = "Load your hex file.";
+        return;
+      }
+      let formData = new FormData();
+      formData.append("file", idInputHexFile.files[0]);
+      fetch('/upload_file', {
+        method: "POST",
+        body: formData
+      }).then(function(response){
+        response.json().then(function(data){
+            console.log(data);
+            if( data.status == 'success')
+            {
+                idStatus.innerHTML = "Hex file uploaded successfully";
+                idVerify.disabled = false
+            }
+            else
+            {
+                idStatus.innerHTML = "Oops, somethin wrong happened! Try again.";
+                idVerify.disabled = true
+            }
+        });
+      });
+      b = setTimeout(updateProgressBar, 100, ip_address);
+
+
+    //  alert('The file has been uploaded successfully.');
+}
+
+function updateProgressBar(ip_address)
+{
+    if(idInputHexFile.files.length == 0 )
+        return;
+
+    console.log('fetching api...read_progress_value/' + ip_address)
+
+    fetch('read_progress_value/' + ip_address).then(function(response)
+    {
+        response.json().then(function(data)
+        {
+            console.log(data);
+            v = parseInt(data.progress_value);
+            if(data.progress_value != null && v <= 100)
+            {
+                idProgressBar.style.width = v + '%';
+                idProgressBar.innerHTML = v + '%';
+                if(v < 100)
+                    updateProgressBar(ip_address);
+
+
+            }
+
+        });
+
+    });
 }
 
 function checkVersion(ip_val)
@@ -148,28 +198,3 @@ function connect_brd(ip_val)
     });
 }
 
-function updateProgressBar(ip_address)
-{
-    if(idInputHexFile.files.length == 0 )
-        return;
-
-    console.log('fetching api...read_progress_value/' + ip_address)
-
-    fetch('read_progress_value/' + ip_address).then(function(response)
-    {
-        response.json().then(function(data)
-        {
-            console.log(data);
-            if(data.progress_value != null)
-            {
-                idProgressBar.style.width = data.progress_value;
-                idProgressBar.innerHTML = data.progress_value;
-
-            }
-
-            updateProgressBar(ip_address);
-
-        });
-
-    });
-}

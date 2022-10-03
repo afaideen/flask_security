@@ -28,9 +28,35 @@ def read_progress_value(ip_address):
         'progress_value':progress_value
     }
     return jsonify(out)
-#   return "Progress value: " + str(progress_value)
 
-@example1.route("/example1_home", methods=['GET', 'POST'])
+
+@example1.route("/upload_file", methods=['POST'])
+@login_required
+def upload_file():
+    f = request.files.get('file')
+    data = f.read().decode('utf-8')
+    ip_address = request.remote_addr
+    if len(ip_address) == 0:
+        ip_address = request.environ['HTTP_X_FORWARDED_FOR']
+    remote_port = request.environ.get('REMOTE_PORT')
+
+    # upload file to board start here
+    #simulating...
+    v = 0
+    while v < 100:
+        v = v + 5
+        progress_bar_value = str(v)
+        cache.set('progress_bar_value_' + ip_address, progress_bar_value)
+        print("Progress value: %s" % (progress_bar_value))
+        time.sleep(CONFIG_TIME_SIM_SPEED)
+    time.sleep(1)
+    cache.delete('progress_bar_value_' + ip_address)
+    out = {
+        'status':'success'
+    }
+    return jsonify(out)
+
+@example1.route("/example1_home", methods=['GET'])
 @login_required
 def example1_home():
     ip_address = request.remote_addr
@@ -127,8 +153,3 @@ def erase_flash(ip_addr):
     return jsonify(o)
 
 
-
-@example1.route("/verify", methods=['GET'])
-@login_required
-def verify():
-    return render_template('example1.html', title='Example1')

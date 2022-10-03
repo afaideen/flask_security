@@ -44,14 +44,15 @@
                 </div>
 
             </fieldset>
-            <div class="form-group">
-                <button id="program" onclick="updateProgressBar('{{ip_address}}')" type="submit" class="btn btn-outline-warning my-2" disabled="disabled">Program</button>
-            </div>
+<!--            <div class="form-group">-->
+<!--                <button id="program" onclick="updateProgressBar('{{ip_address}}')" type="submit" class="btn btn-outline-warning my-2" disabled="disabled">Program</button>-->
+<!--            </div>-->
         </form>
     </div>
     <div class="my-2 justify-content-center text-center">
 
-        <button id="erase" type="button" class="btn btn-outline-danger mx-2" {{disabled_}} onclick="eraseFlash(ip_address_brd.value)">Erase</button>
+        <button id="program" type="button" class="btn btn-outline-warning mx-2" disabled="disabled" onclick="uploadFile('{{ip_address}}')">Program</button>
+        <button id="erase" type="button" class="btn btn-outline-danger mx-2" disabled="disabled" onclick="eraseFlash(ip_address_brd.value)">Erase</button>
         <button id="check_version" type="button" class="btn btn-outline-info mx-2" disabled="disabled" onclick="checkVersion(ip_address_brd.value)">Version</button>
         <button id="verify" type="button" class="btn btn-outline-primary mx-2" disabled="disabled" onclick="verifyCS16(ip_address_brd.value)">Verify</button>
         <button id="run_app" type="button" class="btn btn-outline-success mx-2" disabled="disabled" onclick="runApp(ip_address_brd.value)">Run App</button>
