@@ -245,6 +245,10 @@ function connect_brd(ip_val)
                 idCheckVersion.disabled = false;
                 idStatus.innerHTML = "Board successfully connected. Bootloader firmware version is " + data.version
             }
+            else
+            {
+                idStatus.innerHTML = "Can't connect to the board. Try again."
+            }
 
         });
     });

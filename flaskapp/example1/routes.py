@@ -6,8 +6,8 @@ from flask_login import current_user, login_required
 from flask import render_template, Blueprint, redirect, url_for, session, jsonify, request
 from flaskapp.example1.form import UpdateFileForm
 from flaskapp import cache
-from flaskapp.example1.utils import convertByte2Str, calculate_checksum, upload_data
-from flaskapp.secret.my_udp_btl_v3 import UDPStream
+from flaskapp.example1.utils import convertByte2Str, calculate_checksum, upload_data, UDPStream
+
 
 example1 = Blueprint('example1', __name__)
 
@@ -177,7 +177,7 @@ def example1_home():
 @login_required
 def connect(ip_addr):
     try:
-        conn_stream = UDPStream(ip_addr, 6234, 15)  # 5s timeout   #pic32mx eth sk
+        conn_stream = UDPStream(ip_addr, 6234, 15)  # 5s timeout
 
         print('Querying version..')
         conn_stream.send_request(CMD_READ_VERSION)
