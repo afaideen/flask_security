@@ -13,6 +13,7 @@ idIpAddrBrd.addEventListener("blur", checkInputIpAddr);
 
 idProgressBar = document.getElementById('progress_bar');
 idProgram = document.getElementById('program');
+idRunApp = document.getElementById('run_app');
 
 idStatus = document.getElementById('status');
 idStatus.innerHTML = 'Please enter valid board ip address';
@@ -77,8 +78,38 @@ function enableProgramButton()
 
 }
 
-function uploadFile(ip_address) {
-        count_null = 0
+function verify(ip_address_brd) {
+    let formData = new FormData();
+    formData.append("file", idInputHexFile.files[0]);
+    idStatus.innerHTML = "Verifying checksum...Wait..."
+
+    fetch('verify/' + ip_address_brd, {
+        method: "POST",
+        body: formData
+      }).then(function(response)
+    {
+        response.json().then(function(data)
+        {
+            console.log(data);
+            if(data.status == 'success')
+            {
+                idRunApp.disabled = false;
+                idStatus.innerHTML = "Checksum verified valid. You can activate the new app."
+
+            }
+            else
+            {
+                idRunApp.disabled = true;
+                idStatus.innerHTML = "Checksum found invalid!"
+            }
+
+        });
+
+    });
+
+}
+function uploadFile(ip_address, ip_address_brd) {
+      count_null = 0
       idProgressBar.style.width = '0%';
       idProgressBar.innerHTML = '0%';
       if(idInputHexFile.files.length == 0 )
@@ -86,9 +117,10 @@ function uploadFile(ip_address) {
         idStatus.innerHTML = "Load your hex file.";
         return;
       }
+      idProgram.disabled = true
       let formData = new FormData();
       formData.append("file", idInputHexFile.files[0]);
-      fetch('/upload_file', {
+      fetch('/upload_file/' + ip_address_brd, {
         method: "POST",
         body: formData
       }).then(function(response){
@@ -98,6 +130,7 @@ function uploadFile(ip_address) {
             {
                 idStatus.innerHTML = "Hex file uploaded successfully";
                 idVerify.disabled = false
+
             }
             else
             {
@@ -106,7 +139,7 @@ function uploadFile(ip_address) {
             }
         });
       });
-      b = setTimeout(updateProgressBar, 100, ip_address);
+      b = setTimeout(updateProgressBar, 300, ip_address);
 
 
     //  alert('The file has been uploaded successfully.');

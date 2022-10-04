@@ -7,6 +7,8 @@
 # version of the bootloader library you are using on your PIC MCU.
 from binascii import unhexlify
 
+from flaskapp import cache
+
 CRC_TABLE = [
     [0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7,
      0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1c1, 0xf1ef],
@@ -75,6 +77,7 @@ def calculate_checksum(data):
     j = 0
     g = 0
     for d in data_:
+        d = d.strip()
         cnt = cnt + 1
         if len(d) == 0:
             E = 1
@@ -126,3 +129,38 @@ def calculate_checksum(data):
     E = 1
     print("crc16: OX%s, len: %d" % (p, data_len))
     return p, data_len
+
+def upload_data(ip_address, conn_stream, original_data):
+    data_list = original_data.split('\r\n')
+    count = 0
+    data_size = 0
+    data = bytearray()
+    txcount, rxcount, txsize, rxsize = 0, 0, 0, 0
+    crc = 0
+    for d in data_list:
+        d = d.strip()
+        v = unhexlify(d[1:])
+        data.extend(v)
+        data_size = data_size + len(v)
+        data_str = convertByte2Str(data)
+        if count > 0 and \
+                (
+                        count % 20 == 0 \
+                        or ":0000" in d
+                ):
+            print("sending data..%d\r\n" % (txcount))
+            txsize += conn_stream.send_request('\x03' + data_str, txcount)
+            response = conn_stream.read_response('\x03')
+            rxsize += len(response) + 4
+            txcount += 1
+            rxcount += 1
+
+            v = count / len(data_list) * 100
+            progress_bar_value = str(round(v))
+            cache.set('progress_bar_value_' + ip_address, progress_bar_value)
+            print("Progress value: %s%%" % (progress_bar_value))
+            data = bytearray()
+        count += 1
+        print('*')
+
+    return (txcount, txsize, rxcount, rxsize, data_size)
