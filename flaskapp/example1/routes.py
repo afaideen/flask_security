@@ -152,13 +152,11 @@ def example1_home():
             v = 0
             progress_bar_value = str(v) + '%'
             status_fw = 'Please upload valid hex file'
-            disabled = "disabled=disabled"
     else:
         # random_hex = secrets.token_hex(8)
         v = 0
         progress_bar_value = str(v) + '%'
         status_fw = 'Please enter valid board ip address'
-        disabled = "disabled=disabled"
         cache.set('progress_bar_value_%s:%d' %(ip_address,remote_port),progress_bar_value)
 
 
