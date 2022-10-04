@@ -18,6 +18,24 @@ CMD_VERIFY_CS               = "\x04"
 CMD_JUMP_APP                = "\x05"
 CONFIG_TIME_SIM_SPEED       = 0.5
 
+@example1.route("/run_app/<string:ip_board>", methods=['GET'])
+@login_required
+def run_app(ip_board):
+    try:
+        conn_stream = UDPStream(ip_board, 6234, 15)  # 15s timeout
+        conn_stream.send_request(CMD_JUMP_APP)
+        # r = conn_stream.read_response('\x05')
+        print('Device bootloaded successful..')
+        status = 'success'
+    except Exception as err:
+        status = 'fail'
+        print('Oops, somethin wrong happened!')
+
+    out = {
+        'status': status
+    }
+    return jsonify(out)
+
 @example1.route("/read_progress_value/<string:ip_address>", methods=['GET'])
 @login_required
 def read_progress_value(ip_address):

@@ -78,6 +78,25 @@ function enableProgramButton()
 
 }
 
+function runApp(ip_address_brd) {
+fetch('run_app/' + ip_address_brd, {
+        method: "GET"
+      }).then(function(response)
+    {
+        response.json().then(function(data)
+        {
+            console.log(data);
+            if(data.status == 'success')
+            {
+                idStatus.innerHTML = "New app is running"
+
+            }
+
+        });
+
+    });
+
+}
 function verify(ip_address_brd) {
     let formData = new FormData();
     formData.append("file", idInputHexFile.files[0]);
@@ -182,7 +201,6 @@ function checkVersion(ip_val)
             //eg access data.status, data.version
             if( data.status == 'success')
             {
-                idProgram.disabled = false
                 idStatus.innerHTML = "Bootloader firmware version is " + data.version
             }
 
@@ -215,7 +233,8 @@ function eraseFlash(ip_val)
 
 function connect_brd(ip_val)
 {
-    console.log('Connecting to ' + ip_val + ' ...Just wait...');
+    idStatus.innerHTML = 'Connecting to ' + ip_val + ' ...Just wait...'
+
     fetch('/connect/' + ip_val).then(function(response){
         response.json().then(function(data){
             console.log(data);
