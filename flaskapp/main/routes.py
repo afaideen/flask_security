@@ -1,5 +1,6 @@
 from flask import render_template, request, Blueprint
 
+from flaskapp import cache
 from flaskapp.models import Post
 
 main = Blueprint('main', __name__)
@@ -15,5 +16,19 @@ def home():
 @main.route("/about")
 def about():
     return render_template('about.html', title='About')
+
+
+# class MyObj:
+#     pass
+#
+#
+# a = MyObj()
+# a.b = 1
+# a.c = 'hello'
+# a.d = True
+#
+# cache.set('a_myobj', a)
+# my_a_obj = cache.get('a_myobj')
+E = 1
 
 

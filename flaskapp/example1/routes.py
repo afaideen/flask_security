@@ -167,7 +167,7 @@ def example1_home():
                            progress_bar_value=progress_bar_value,
                            ip_address=ip_address,
                            status_fw=status_fw,
-                           disabled_=disabled,
+                           # disabled_=disabled,
                            )
 
 @example1.route("/check_version/<string:ip_addr>", methods=['GET'])
