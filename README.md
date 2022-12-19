@@ -1,5 +1,8 @@
 # Flask Security
+#### References:
+https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-22-04
 
+https://www.youtube.com/watch?v=goToXTC96Co&list=PL-osiE80TeTs4UjLw5MM6OjgkjFeUxCYH&index=13
 
 - Login to ubuntu server v22.04
     >ssh root@'ipaddress'
@@ -42,11 +45,73 @@ Let's install firewall
 - sudo ufw default deny incoming 
 - sudo ufw allow ssh 
 - sudo ufw allow 5000 
+- sudo ufw allow 8000 
 - sudo ufw enable 
 - sudo ufw status
 
 Transfer all project workfiles from local pc to remote server, use bash, 
 - scp -r D:/python/flask_security han@ip_addr:~/
 
+## Install Anaconda
+- https://www.digitalocean.com/community/tutorials/how-to-install-the-anaconda-python-distribution-on-ubuntu-22-04
 
+## Install Redis
+- https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-22-04
 
+## Install NGINX
+> sudo apt install nginx
+> 
+> sudo rm /etc/nginx/sites-enabled/default
+> 
+> sudo nano /etc/nginx/sites-enabled/flask_security
+
+Add code below
+```
+server {
+        listen 80;
+        server_name 139.162.44.216 myfreedomaintest.website;
+
+        location /static {
+                alias /home/han/flask_security/flaskapp/static;
+        }
+
+        location / {
+                proxy_pass http://localhost:8000;
+                include /etc/nginx/proxy_params;
+                proxy_redirect off;
+        }
+
+}
+```
+Link it
+> sudo ln -s /etc/nginx/sites-available/flask_security /etc/nginx/sites-enabled
+
+Allow port 8000
+> sudo ufw allow 8000
+> 
+> sudo ufw allow http/tcp
+> 
+> sudo ufw delete allow 5000 (optional)
+> 
+> sudo ufw enable
+> 
+Restart nginx
+> sudo systemctl restart nginx
+> 
+> sudo usermod -a -G han www-data
+> 
+> chmod 710 /home/han
+> 
+> sudo nginx -t
+> 
+> sudo systemctl restart nginx
+> 
+> sudo systemctl enable nginx
+> 
+> sudo systemctl status -l nginx
+> 
+Run gunicorn for test
+> gunicorn -w 3 run:app 
+- should be able to view the web page from http://<ip_addr> (no port)
+
+- create service, start and enable the service. Make sure .sock file is created.

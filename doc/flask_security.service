@@ -1,0 +1,25 @@
+#sudo nano /etc/systemd/system/flask_security.service
+[Unit]
+Description=Gunicorn instance to serve flask_security
+After=network.target
+
+[Service]
+User=han
+Group=www-data
+WorkingDirectory=/home/han/flask_security
+Environment="PATH=/home/han/anaconda3/envs/flask_ve310/bin"
+
+ExecStart=/home/han/anaconda3/envs/flask_ve310/bin/gunicorn --workers 3 --bind unix:flask_security.sock -m 007 run:app --reload --enable-stdio-inheritance --error-logfile /home/han/flask_security/error.log --access-logfile /home/han/flask_security/access.log --capture-output --log-level error
+
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
+
+#sudo systemctl start flask_security
+#sudo systemctl enable flask_security
+#sudo systemctl status flask_security
+#gunicorn --workers 3 --bind 0.0.0.0:5050 -m 007 run:app
+#gunicorn --workers 3 --bind 0.0.0.0:5051 -m 007 run:app
+#gunicorn --access-logfile - --workers 3 --bind 0.0.0.0:5051 -m 007 run:app
+#gunicorn --log-level=debug --workers 3 --bind 0.0.0.0:5051 -m 007 run:app

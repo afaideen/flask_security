@@ -1,0 +1,17 @@
+#sudo nano /etc/nginx/nginx.conf
+#sudo nano /etc/nginx/sites-enabled/flask_security
+server {
+        listen 80;
+        server_name 139.162.44.216 myfreedomaintest.website;
+
+        location /static {
+                alias /home/han/flask_security/flaskapp/static;
+        }
+
+        location / {
+                proxy_pass http://unix:/home/han/flask_security/flask_security.sock;
+                include proxy_params;
+                proxy_redirect off;
+        }
+
+}
