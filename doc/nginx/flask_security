@@ -11,6 +11,7 @@ server {
         location / {
                 proxy_pass http://unix:/home/han/flask_security/flask_security.sock;
                 include proxy_params;
+                proxy_set_header REMOTE_PORT $remote_port;
                 proxy_redirect off;
         }
 
