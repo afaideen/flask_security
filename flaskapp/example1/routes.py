@@ -130,10 +130,7 @@ def example1_home():
     ip_address = request.remote_addr
     if len(ip_address) == 0:
         ip_address = request.environ['HTTP_X_FORWARDED_FOR']
-    if sys.platform == 'win32':
-        remote_port = request.environ.get('REMOTE_PORT')
-    else:
-        remote_port = request.headers.get('REMOTE_PORT')
+    remote_port = request.environ.get('REMOTE_PORT')
     form = UpdateFileForm()
     if request.method == 'POST':
         if form.validate_on_submit():
