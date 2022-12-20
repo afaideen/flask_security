@@ -133,7 +133,9 @@ def example1_home():
     if sys.platform == 'win32':
         remote_port = request.environ.get('REMOTE_PORT')
     else:
-        remote_port = request.headers.get('REMOTE_PORT')
+        remote_port_ = request.headers.get('REMOTE_PORT')
+        remote_port = int(remote_port_.split(":")[1])
+
     form = UpdateFileForm()
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -161,6 +163,7 @@ def example1_home():
         v = 0
         progress_bar_value = str(v) + '%'
         status_fw = 'Please enter valid board ip address'
+        print('progress_bar_value_%s:%d' %(ip_address,remote_port))
         cache.set('progress_bar_value_%s:%d' %(ip_address,remote_port),progress_bar_value)
 
 
