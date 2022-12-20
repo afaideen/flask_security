@@ -1,4 +1,4 @@
-import os
+import os, sys
 import secrets
 import time
 from binascii import hexlify, unhexlify
