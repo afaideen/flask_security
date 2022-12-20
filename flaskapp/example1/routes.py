@@ -94,9 +94,14 @@ def upload_file(ip_board):
     original_data = f.read().decode('utf-8')
     ip_address = request.remote_addr
     if len(ip_address) == 0:
-        ip_address = request.environ['HTTP_X_FORWARDED_FOR']
-    remote_port = request.environ.get('REMOTE_PORT')
+        ip_address_ = request.environ['HTTP_X_FORWARDED_FOR']
+        ip_address = ip_address_[0]
+    # if sys.platform == 'win32':
+    #     remote_port = request.environ.get('REMOTE_PORT')
+    # else:
+    #     remote_port = request.headers.get('REMOTE_PORT')
     error = None
+    print("ip_address: " + ip_address)
     try:
         conn_stream = UDPStream(ip_board, 6234, 15)  # 5s timeout   #pic32mx eth sk
 
