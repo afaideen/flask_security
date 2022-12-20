@@ -129,13 +129,15 @@ def upload_file(ip_board):
 def example1_home():
     ip_address = request.remote_addr
     if len(ip_address) == 0:
-        ip_address = request.environ['HTTP_X_FORWARDED_FOR']
+        ip_address_ = request.environ['HTTP_X_FORWARDED_FOR'].split(",")
+        ip_address = ip_address_[0]
+
     if sys.platform == 'win32':
         remote_port = request.environ.get('REMOTE_PORT')
     else:
-        remote_port_ = request.headers.get('REMOTE_PORT')
-        remote_port = int(remote_port_.split(":")[1])
-
+        remote_port = request.headers.get('REMOTE_PORT')
+    print("ip_address: " + ip_address)
+    print("remote_port: " + str(remote_port))
     form = UpdateFileForm()
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -163,7 +165,6 @@ def example1_home():
         v = 0
         progress_bar_value = str(v) + '%'
         status_fw = 'Please enter valid board ip address'
-        print('progress_bar_value_%s:%d' %(ip_address,remote_port))
         cache.set('progress_bar_value_%s:%d' %(ip_address,remote_port),progress_bar_value)
 
 
