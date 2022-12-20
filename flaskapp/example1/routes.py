@@ -165,7 +165,7 @@ def example1_home():
         v = 0
         progress_bar_value = str(v) + '%'
         status_fw = 'Please enter valid board ip address'
-        cache.set('progress_bar_value_%s:%d' %(ip_address,remote_port),progress_bar_value)
+        cache.set('progress_bar_value_%s:%d' %(ip_address,int(remote_port)),progress_bar_value)
 
 
         # form.program.render_kw['disabled'] = False
