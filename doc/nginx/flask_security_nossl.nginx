@@ -1,0 +1,23 @@
+#sudo nano /etc/nginx/nginx.conf
+#sudo nano /etc/nginx/sites-enabled/flask_security
+server {
+        server_name 139.162.44.216 www.myfreedomaintest.website myfreedomaintest.website;
+
+        location /static {
+                alias /home/han/flask_security/flaskapp/static;
+        }
+
+        location / {
+
+                proxy_pass  http://unix:/home/han/flask_security/flask_security.sock;
+                include /etc/nginx/proxy_params;
+                proxy_set_header REMOTE_PORT $remote_port;
+                proxy_redirect off;
+
+                proxy_set_header Host $http_host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+}

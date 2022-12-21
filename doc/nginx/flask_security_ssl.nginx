@@ -1,5 +1,7 @@
 #sudo nano /etc/nginx/nginx.conf
 #sudo nano /etc/nginx/sites-enabled/flask_security
+
+##http and https
 server {
         server_name 139.162.44.216 www.myfreedomaintest.website myfreedomaintest.website;
 
@@ -20,31 +22,31 @@ server {
                 proxy_set_header X-Forwarded-Proto $scheme;
         }
 
-    	listen 443 ssl; # managed by Certbot
-    	ssl_certificate /etc/letsencrypt/live/www.myfreedomaintest.website/fullchain.pem; # managed by>
-    	ssl_certificate_key /etc/letsencrypt/live/www.myfreedomaintest.website/privkey.pem; # managed >
-    	include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
-    	ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/www.myfreedomaintest.website/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/www.myfreedomaintest.website/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
 
 }
 
 server {
+    if ($host = myfreedomaintest.website) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
     if ($host = www.myfreedomaintest.website) {
         return 301 https://$host$request_uri;
     } # managed by Certbot
-    if ( $host = myfreedomaintest.website ) {
-        return 301 https://$host$request_uri;
-    }
-        listen 80;
-        server_name 139.162.44.216 www.myfreedomaintest.website myfreedomaintest.website;
-    return 404; # managed by Certbot
-}
 
-server{
-        listen          80;
-        listen          443 ssl;
-        server_name     www.myfreedomaintest.website myfreedomaintest.website;
-        return          301 https://www.myfreedomaintest.website$request_uri;
+    listen 80;
+    server_name 139.162.44.216 www.myfreedomaintest.website myfreedomaintest.website;
+    return 404; # managed by Certbot
+
 
 }
 
