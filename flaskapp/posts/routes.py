@@ -1,13 +1,45 @@
 from flask import (render_template, url_for, flash,
-                   redirect, request, abort, Blueprint)
+                   redirect, request, abort, Blueprint, jsonify)
 from flask_login import current_user, login_required
 from flaskapp import db
 from flaskapp.models import Post
 from flaskapp.posts.forms import PostForm
 
+import json
+
 posts = Blueprint('posts', __name__)
 
 
+@posts.route("/post/test", methods=['POST','GET'])
+def test():
+    s = 'Hi! I am your server here.'
+    d = {}
+    d['key1'] = s
+    d['key2'] = None
+    d['key3'] = None
+    try:
+        v = request.data.decode('utf-8')
+        e = None
+        d = json.loads(v)
+        d['key1'] = s
+    except Exception as err:
+        e = "No data found"
+        d['key1'] = s
+
+    r = {
+        "key1": d['key1'],
+        "key2": d['key2'],
+        "key3": d['key3'],
+        "error": e
+    }
+    # Sample data returned example if no error
+    # {
+    #     "error": null,
+    #     "key1": "Hi! I am your server here.",
+    #     "key2": 128.0123,
+    #     "key3": true
+    # }
+    return jsonify(r)
 @posts.route("/post/new", methods=['GET', 'POST'])
 @login_required
 def new_post():
