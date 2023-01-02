@@ -21,11 +21,13 @@ def test():
         v = request.data.decode('utf-8')
         e = None
         d = json.loads(v)
+        print("client: ", d)
         d['key1'] = s
+        print("server: ", d)
     except Exception as err:
         e = "No data found"
         d['key1'] = s
-
+        print(e)
     r = {
         "key1": d['key1'],
         "key2": d['key2'],
