@@ -10,6 +10,13 @@ import json
 posts = Blueprint('posts', __name__)
 
 
+# Sample data returned example if no error
+# {
+#     "error": null,
+#     "key1": "Hi! I am your server here.",
+#     "key2": 128.0123,
+#     "key3": true
+# }
 @posts.route("/post/test", methods=['POST','GET'])
 def test():
     s = 'Hi! I am your server here.'
@@ -34,13 +41,7 @@ def test():
         "key3": d['key3'],
         "error": e
     }
-    # Sample data returned example if no error
-    # {
-    #     "error": null,
-    #     "key1": "Hi! I am your server here.",
-    #     "key2": 128.0123,
-    #     "key3": true
-    # }
+
     return jsonify(r)
 @posts.route("/post/new", methods=['GET', 'POST'])
 @login_required
