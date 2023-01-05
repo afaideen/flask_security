@@ -1,13 +1,13 @@
 import os, sys
 import secrets
-import time
+import time, json, requests
 from binascii import hexlify, unhexlify
 
 from flask_login import current_user, login_required
 from flask import render_template, Blueprint, redirect, url_for, session, jsonify, request
 from flaskapp.example1.form import UpdateFileForm
 from flaskapp import cache
-from flaskapp.example1.utils import convertByte2Str, calculate_checksum, upload_data, UDPStream
+from flaskapp.example1.utils import convertByte2Str, calculate_checksum, upload_data, UDPStream, get_ip
 
 
 example1 = Blueprint('example1', __name__)
@@ -205,6 +205,43 @@ def connect(ip_addr):
         'version': v,
     }
     return jsonify(out)
+
+@example1.route("/test_berkeley", methods=['POST'])
+# @login_required
+def test_berkeley():
+
+    try:
+        v = request.data.decode('utf-8')
+        e = None
+        d = json.loads(v)
+        print("client: ", d)
+        host = d['host']
+    except Exception as err:
+        e = "error in data format"
+        print(e)
+        d = {}
+        d['host'] = None
+        d['error'] = e
+        return jsonify(d)
+
+    if sys.platform == 'win32':
+        ip_address = request.remote_addr
+        remote_port = request.environ.get('REMOTE_PORT')
+    else:
+        ip_address_ = request.environ['HTTP_X_FORWARDED_FOR'].split(",")
+        ip_address = ip_address_[0]
+        remote_port = request.headers.get('REMOTE_PORT')
+    print("ip_address: " + ip_address)
+    print("remote_port: " + str(remote_port))
+
+    url = "http://%s" %(host)
+    json_body_data = {
+        "msg": "hello there!",
+        "ipaddr": get_ip()    ,
+    }
+    r = requests.post(url, json = json_body_data, timeout=10)
+    print(r.text)
+    return jsonify(r.json())
 
 @example1.route("/erase_flash/<string:ip_addr>", methods=['GET'])
 @login_required

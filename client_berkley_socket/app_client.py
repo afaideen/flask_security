@@ -21,7 +21,13 @@ d_body_str = json.dumps(d)
 # dest_ip_addr = "localhost"
 # dest_ip_addr = "192.168.0.103"  #don't care param
 json_data_header =\
-'''GET /post/test HTTP/1.1\r\nHost: %s:%d\r\nContent-Type: application/json\r\nConnection: keep-alive\r\nAccept: */*\r\nContent-Length: %d\r\n\r\n''' %(HOST, PORT,len(d_body_str))
+                '''GET /post/test HTTP/1.1\r\n
+                    Host: %s:%d\r\nContent-Type: application/json\r\n
+                    Connection: keep-alive\r\n
+                    Accept: */*\r\n
+                    Content-Length: %d\r\n\r\n
+                    ''' \
+                %(HOST, PORT,len(d_body_str))
 json_data = json_data_header + d_body_str
 
 # json_data_str = json.dumps(json_data)
