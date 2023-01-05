@@ -231,6 +231,22 @@ function eraseFlash(ip_val)
 
 }
 
+function test_berkeley_server(ip_val)
+{
+    idStatus.innerHTML = 'Connecting to ' + ip_val + ' ...Just wait...'
+    fetch("/test_berkeley",{
+        method: "POST",
+        body: "{\"host\":\""+ip_val+":9764\"}"
+      }).then(function(response){
+            e = 1;
+            response.json().then(function(data){
+                console.log(data);
+                idStatus.innerHTML = JSON.stringify(data);
+                e = 1;
+            });
+
+      });
+}
 function connect_brd(ip_val)
 {
     idStatus.innerHTML = 'Connecting to ' + ip_val + ' ...Just wait...'

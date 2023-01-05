@@ -239,8 +239,19 @@ def test_berkeley():
         "msg": "hello there!",
         "ipaddr": get_ip()    ,
     }
-    r = requests.post(url, json = json_body_data, timeout=10)
-    print(r.text)
+    try:
+        if sys.platform == 'win32':
+            r = requests.post(url, json = json_body_data, timeout = 1)
+        else:
+            r = requests.post(url, json = json_body_data, timeout = 5)
+        print(r.text)
+    except Exception as err:
+        e = "Can't find board"
+        print(e)
+        d = {}
+        d['host'] = None
+        d['error'] = e
+        return jsonify(d)
     return jsonify(r.json())
 
 @example1.route("/erase_flash/<string:ip_addr>", methods=['GET'])
