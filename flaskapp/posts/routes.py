@@ -1,13 +1,22 @@
-from flask import (render_template, url_for, flash,
-                   redirect, request, abort, Blueprint, jsonify)
+import sys
+
+import requests
+from flask import session, render_template, url_for, flash, redirect, request, abort, Blueprint, jsonify, Response, make_response
 from flask_login import current_user, login_required
-from flaskapp import db
+from flaskapp import db, cache, app, socketio
+from flaskapp.example1.routes import example1
+from flaskapp.example1.utils import get_ip
 from flaskapp.models import Post
 from flaskapp.posts.forms import PostForm
+
 
 import json
 
 posts = Blueprint('posts', __name__)
+
+@socketio.on('my event')
+def handle_my_custom_event(json):
+    print('received json: ' + str(json))
 
 
 # Sample data returned example if no error
@@ -18,12 +27,18 @@ posts = Blueprint('posts', __name__)
 #     "key3": true
 # }
 @posts.route("/post/test", methods=['POST','GET'])
+# @login_required
 def test():
     s = 'Hi! I am your server here.'
     d = {}
     d['key1'] = s
     d['key2'] = None
     d['key3'] = None
+    session_param1 = session.get("session_param1")
+    print("session_param1 is %s" %(session_param1))
+    cache_param1 = cache.get("cache_param1")
+    print("cache_param1 is %s" % (cache_param1))
+    cache.delete("cache_param1")
     try:
         v = request.data.decode('utf-8')
         e = None
@@ -43,6 +58,60 @@ def test():
     }
 
     return jsonify(r)
+
+@posts.route("/test_berkeley", methods=['POST'])
+# @login_required
+def test_berkeley():
+
+    try:
+        v = request.data.decode('utf-8')
+        e = None
+        d = json.loads(v)
+        print("client: ", d)
+        host = d['host']
+    except Exception as err:
+        e = "error in data format"
+        print(e)
+        d = {}
+        d['host'] = None
+        d['error'] = e
+        return jsonify(d)
+
+    if sys.platform == 'win32':
+        ip_address = request.remote_addr
+        remote_port = request.environ.get('REMOTE_PORT')
+    else:
+        ip_address_ = request.environ['HTTP_X_FORWARDED_FOR'].split(",")
+        ip_address = ip_address_[0]
+        remote_port = request.headers.get('REMOTE_PORT')
+    print("ip_address: " + ip_address)
+    print("remote_port: " + str(remote_port))
+
+    url = "http://%s" %(host)
+    json_body_data = {
+        "msg": "hello there!",
+        "ipaddr": get_ip()    ,
+    }
+
+    e = 1
+    try:
+        if sys.platform == 'win32':
+            r = requests.post(url, json = json_body_data, timeout = 1)
+        else:
+            r = requests.post(url, json = json_body_data, timeout = 5)
+        print(r.text)
+    except Exception as err:
+        e = "Can't find board"
+        print(e)
+        d = {}
+        d['host'] = None
+        d['error'] = e
+        return jsonify(d)
+    # session.setdefault("session_param1")
+    session["session_param1"] = "msg123"
+    cache.set("cache_param1", "msg123")
+    return jsonify(r.json())
+
 @posts.route("/post/new", methods=['GET', 'POST'])
 @login_required
 def new_post():

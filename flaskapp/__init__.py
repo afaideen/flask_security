@@ -1,16 +1,22 @@
 
 import sys, os
-from flask import Flask
+from datetime import timedelta
+
+from flask import Flask, session
 from flask_cors import CORS
 from flask_caching import Cache
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
+from flask_socketio import SocketIO, emit, send
+# from flask_session import Session
+
 
 from flaskapp.config_ import Config_
 
 app = Flask(__name__)
+
 
 if sys.platform == 'win32':
     config_redis = {
@@ -28,6 +34,7 @@ else:
 cache = Cache(app, config=config_redis)
 cache.clear()
 
+
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
@@ -35,6 +42,16 @@ login_manager.login_view = 'users.login'
 login_manager.login_message_category = 'info'
 mail = Mail()
 
+# app.secret_key = "5791628bb0b13ce0c676dfde280ba245"
+# app.config['SECRET_KEY'] = 'top-secret!'
+# app.config['SESSION_TYPE'] = 'simple'
+# app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
+SESSION_TYPE = 'filesystem'
+app.config.from_object(__name__)
+
+CORS(app)
+# socketio = SocketIO(app)
+socketio = SocketIO(app, manage_session=False)
 
 def create_app(config_class=Config_):
 
@@ -44,8 +61,6 @@ def create_app(config_class=Config_):
     bcrypt.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
-
-
 
     from flaskapp.main.routes import main
     from flaskapp.users.routes import users

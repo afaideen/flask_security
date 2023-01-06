@@ -206,53 +206,6 @@ def connect(ip_addr):
     }
     return jsonify(out)
 
-@example1.route("/test_berkeley", methods=['POST'])
-# @login_required
-def test_berkeley():
-
-    try:
-        v = request.data.decode('utf-8')
-        e = None
-        d = json.loads(v)
-        print("client: ", d)
-        host = d['host']
-    except Exception as err:
-        e = "error in data format"
-        print(e)
-        d = {}
-        d['host'] = None
-        d['error'] = e
-        return jsonify(d)
-
-    if sys.platform == 'win32':
-        ip_address = request.remote_addr
-        remote_port = request.environ.get('REMOTE_PORT')
-    else:
-        ip_address_ = request.environ['HTTP_X_FORWARDED_FOR'].split(",")
-        ip_address = ip_address_[0]
-        remote_port = request.headers.get('REMOTE_PORT')
-    print("ip_address: " + ip_address)
-    print("remote_port: " + str(remote_port))
-
-    url = "http://%s" %(host)
-    json_body_data = {
-        "msg": "hello there!",
-        "ipaddr": get_ip()    ,
-    }
-    try:
-        if sys.platform == 'win32':
-            r = requests.post(url, json = json_body_data, timeout = 1)
-        else:
-            r = requests.post(url, json = json_body_data, timeout = 5)
-        print(r.text)
-    except Exception as err:
-        e = "Can't find board"
-        print(e)
-        d = {}
-        d['host'] = None
-        d['error'] = e
-        return jsonify(d)
-    return jsonify(r.json())
 
 @example1.route("/erase_flash/<string:ip_addr>", methods=['GET'])
 @login_required

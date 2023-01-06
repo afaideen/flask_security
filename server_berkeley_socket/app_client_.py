@@ -3,6 +3,8 @@
 import socket, json
 
 # HOST = "127.0.0.1"  # The server's hostname or IP address
+import time
+
 HOST = "localhost"  # The server's hostname or IP address
 PORT = 5000  # The port used by the server
 
@@ -20,23 +22,20 @@ d = {
 d_body_str = json.dumps(d)
 # dest_ip_addr = "localhost"
 # dest_ip_addr = "192.168.0.103"  #don't care param
-json_data_header =\
-                '''GET /post/test HTTP/1.1\r\n
-                    Host: %s:%d\r\nContent-Type: application/json\r\n
-                    Connection: keep-alive\r\n
-                    Accept: */*\r\n
-                    Content-Length: %d\r\n\r\n
-                    ''' \
+json_data_header ='''GET /post/test HTTP/1.1\r\nHost: %s:%d\r\nContent-Type: application/json\r\nConnection: keep-alive\r\nAccept: */*\r\nContent-Length: %d\r\n\r\n''' \
                 %(HOST, PORT,len(d_body_str))
 json_data = json_data_header + d_body_str
 
 # json_data_str = json.dumps(json_data)
+while(1):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.connect((HOST, PORT))
-    # s.sendall(b"Hello, world")
-    s.send(bytes(json_data, "utf-8"))
-    data = s.recv(1024)
-    E = 1
-
-print(f"Received {data!r}")
+        s.connect((HOST, PORT))
+        # s.sendall(b"Hello, world")
+        s.send(bytes(json_data, "utf-8"))
+        data = s.recv(1024)
+        print(f"Received {data!r}")
+        s.close()
+        time.sleep(2)
+        E = 1
+E = 1
