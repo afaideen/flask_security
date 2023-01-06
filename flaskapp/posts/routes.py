@@ -3,7 +3,8 @@ import sys
 import requests
 from flask import session, render_template, url_for, flash, redirect, request, abort, Blueprint, jsonify, Response, make_response
 from flask_login import current_user, login_required
-from flaskapp import db, cache, app, socketio
+from flaskapp import db, cache, app
+# from flaskapp import socketio
 from flaskapp.example1.routes import example1
 from flaskapp.example1.utils import get_ip
 from flaskapp.models import Post
@@ -14,9 +15,9 @@ import json
 
 posts = Blueprint('posts', __name__)
 
-@socketio.on('my event')
-def handle_my_custom_event(json):
-    print('received json: ' + str(json))
+# @socketio.on('my event')
+# def handle_my_custom_event(json):
+#     print('received json: ' + str(json))
 
 
 # Sample data returned example if no error

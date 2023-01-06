@@ -9,7 +9,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
-from flask_socketio import SocketIO, emit, send
+# from flask_socketio import SocketIO, emit, send
 # from flask_session import Session
 
 
@@ -50,7 +50,7 @@ mail = Mail()
 # app.config.from_object(__name__)
 
 CORS(app)
-socketio = SocketIO(app)
+# socketio = SocketIO(app)
 # socketio = SocketIO(app, manage_session=False)
 
 def create_app(config_class=Config_):
