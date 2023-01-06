@@ -11,10 +11,10 @@ global thread
 app = create_app()
 thread = None
 thread_lock = Lock()
-sess = Session(app)
+# sess = Session(app)
 
 if __name__ == '__main__':
-    sess.init_app(app)
+    # sess.init_app(app)
     # with thread_lock:
     #     if thread is None:
     #         thread = socketio.start_background_task(background_thread)

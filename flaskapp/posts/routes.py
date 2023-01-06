@@ -34,8 +34,8 @@ def test():
     d['key1'] = s
     d['key2'] = None
     d['key3'] = None
-    session_param1 = session.get("session_param1")
-    print("session_param1 is %s" %(session_param1))
+    # session_param1 = session.get("session_param1")
+    # print("session_param1 is %s" %(session_param1))
     cache_param1 = cache.get("cache_param1")
     print("cache_param1 is %s" % (cache_param1))
     cache.delete("cache_param1")
@@ -60,9 +60,9 @@ def test():
     return jsonify(r)
 
 @posts.route("/test_berkeley", methods=['POST'])
-# @login_required
+@login_required
 def test_berkeley():
-    session["session_param1"] = "msg123"
+    # session["session_param1"] = "msg123"
     cache.set("cache_param1", "msg123")
     try:
         v = request.data.decode('utf-8')

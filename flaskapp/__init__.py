@@ -46,12 +46,12 @@ mail = Mail()
 # app.config['SECRET_KEY'] = 'top-secret!'
 # app.config['SESSION_TYPE'] = 'simple'
 # app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
-SESSION_TYPE = 'filesystem'
-app.config.from_object(__name__)
+# SESSION_TYPE = 'filesystem'
+# app.config.from_object(__name__)
 
 CORS(app)
-# socketio = SocketIO(app)
-socketio = SocketIO(app, manage_session=False)
+socketio = SocketIO(app)
+# socketio = SocketIO(app, manage_session=False)
 
 def create_app(config_class=Config_):
 
