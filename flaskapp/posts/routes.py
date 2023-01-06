@@ -62,7 +62,8 @@ def test():
 @posts.route("/test_berkeley", methods=['POST'])
 # @login_required
 def test_berkeley():
-
+    session["session_param1"] = "msg123"
+    cache.set("cache_param1", "msg123")
     try:
         v = request.data.decode('utf-8')
         e = None
@@ -107,9 +108,8 @@ def test_berkeley():
         d['host'] = None
         d['error'] = e
         return jsonify(d)
-    # session.setdefault("session_param1")
-    session["session_param1"] = "msg123"
-    cache.set("cache_param1", "msg123")
+
+
     return jsonify(r.json())
 
 @posts.route("/post/new", methods=['GET', 'POST'])
