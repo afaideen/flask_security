@@ -1,3 +1,8 @@
+
+
+#ref
+#1. https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https
+
 from flask_socketio import SocketIO
 from werkzeug.serving import WSGIRequestHandler
 
@@ -25,6 +30,7 @@ if __name__ == '__main__':
     # socketio.run(app, debug=False, port=5000, host="0.0.0.0")
     ##use '0.0.0.0' to access the server from external ip
     # app.run(host="0.0.0.0", port=5000, ssl_context=('cert.pem', 'key.pem'))
+    # app.run(host="0.0.0.0", port=5000, ssl_context=('mchp_cert_test/cert.pem', 'mchp_cert_test/key.pem'))
     # app.run(ho192.168.0.101st="127.0.0.1", port=5000)
     # app.run(host="0.0.0.0")
     # app.run(host="0.0.0.0", port=5000)
