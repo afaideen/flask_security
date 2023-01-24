@@ -1,0 +1,40 @@
+Created by : Aizul Faideen Hamim (7/26/2022, 21:30)
+[ Attachments: Capture.PNG.png ]
+Hi Nicky,
+
+Thanks for the guide. Really appreciate it.
+
+I think it'd be pretty much easier to use xxd tool as it helps to generate .c file as well.
+
+Here are my basic step to generate that der file to replace with the variable client_cert_der_2048[].
+
+
+
+#to generate client certificate
+
+# Instruction step by step,
+
+# 1. > openssl genrsa -out client.key 2048
+
+# 2. Generate client.csr needed to generate client key
+	> openssl req -out client.csr -key client.key -new
+
+# 2. Generate Server certificate for flask server
+    a. > openssl req -new -x509 -days 3650 -extensions v3_ca -keyout ca.key -out ca.crt
+    b. Convert ca.crt to PEM format used for flask server!
+		> openssl x509 -in ca.crt -out cert.pem
+		Convert .key to .pem
+		> openssl rsa -in ca.key -text > key.pem
+
+# 3. Generate client certificate 
+	openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out client.crt -days 3600
+	
+
+# 4. Convert into der extension because client pic32mx needs this form 
+	openssl x509 -outform der -in client.crt -out clientcert2048.der
+
+# 5. openssl x509 -in clientcert2048.der -inform der -noout -text --> to verify
+
+# 5a. Download and install xxd tool. Get it at https://sourceforge.net/projects/xxd-for-windows/
+
+# 6. xxd -i clientcert2048.der clientcert2048_der.c --> convert to c array

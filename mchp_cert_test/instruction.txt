@@ -1,1 +1,5 @@
-openssl req -x509 -newkey rsa:2048 -nodes -out cert.pem -keyout key.pem -days 3650
+openssl req -x509 -newkey rsa:2048 -nodes -out cert_.pem -keyout key_.pem -days 3650
+
+openssl x509 -outform der -in cert.pem -out clientcert2048.der
+
+xxd -i clientcert2048.der clientcert2048_der.c --> convert to c array
