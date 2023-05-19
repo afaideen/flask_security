@@ -32,6 +32,8 @@ Here are my basic step to generate that der file to replace with the variable cl
 
 # 4. Convert into der extension because client pic32mx needs this form 
 	openssl x509 -outform der -in client.crt -out clientcert2048.der
+  4b. Convert .pem to .der. Ref https://www.entrust.com/knowledgebase/ssl/how-do-i-convert-my-pem-certificate-to-a-der-certificate-format 
+		> openssl x509 -in cert.pem -out cert.der -outform DER
 
 # 5. openssl x509 -in clientcert2048.der -inform der -noout -text --> to verify
 

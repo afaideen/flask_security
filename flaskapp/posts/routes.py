@@ -51,14 +51,14 @@ def test():
         e = "No data found"
         d['key1'] = s
         print(e)
-    r = {
-        "key1": d['key1'],
-        "key2": d['key2'],
-        "key3": d['key3'],
-        "error": e
-    }
-
-    return jsonify(r)
+    # r = {
+    #     "key1": d['key1'],
+    #     "key2": d['key2'],
+    #     "key3": d['key3'],
+    #     "error": e
+    # }
+    d.update({"e": e})
+    return jsonify(d)
 
 @posts.route("/test_berkeley", methods=['POST'])
 @login_required
